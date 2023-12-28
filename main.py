@@ -8,7 +8,7 @@ matrix = [[0.433, 0.389, 0.491, 0.618, 0.433, 1.000, 0.433],
           [0.467, 0.417, 0.667, 0.500, 0.500, 1.000, 0.417],
           [0.056, 0.031, 0.108, 0.142, 0.032, 1.000, 0.037]]
 
-priority = [[1, 0.1, 0.9, 1, 0.2],
+priorities = [[1, 0.1, 0.9, 1, 0.2],
             [0.1, 0.9, 0.2, 0.1, 1],
             [0.1, 0.2, 1, 0.8, 0.9],
             [rd.random(), rd.random(), rd.random(), rd.random(), rd.random(), rd.random()]]
@@ -92,7 +92,25 @@ def calculate_and_output_criteria(criteria_function, criteria_name, optimism=-1.
     print()
 
 
+def get_input_priorities(ask_allowing_input_priorities=True):
+    chosen_priorities = []
+    allow_input_priorities = 0
+    if ask_allowing_input_priorities:
+        allow_input_priorities = int(input("Ввести приоритет вручную (0 - нет, 1 - да): "))
+
+    if allow_input_priorities > 0:
+        priorities_str = str(input(f"Введите {len(priorities[0])} приоритетов через пробел: ")).split(" ")
+        for priority in priorities_str:
+            chosen_priorities.append(priority)
+    else:
+        experiment_index = int(input(f"Введите номер эксперимента (1 - {len(priorities)}): ")) - 1
+        chosen_priorities = priorities[experiment_index]
+    return chosen_priorities
+
+
 if __name__ == '__main__':
+    input_priorities = get_input_priorities(ask_allowing_input_priorities=False)
+
     calculate_and_output_criteria(get_laplace_criteria, "Критерий Лапласа")
     calculate_and_output_criteria(get_wald_criteria, "Критерий Вальда")
     calculate_and_output_criteria(get_savage_criteria, "Критерий Сэвиджа")
