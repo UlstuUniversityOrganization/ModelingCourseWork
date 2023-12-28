@@ -1,12 +1,11 @@
 import random as rd
-import numpy as np
 import statistics
-import pandas
+
 matrix = [[0.433, 0.389, 0.491, 0.618, 0.433, 1.000, 0.433],
           [0.853, 0.945, 1.000, 1.000, 0.844, 0.734, 0.853],
-          [0.847, 0.447, 1.000, 0.847, 0.441, 0.971, 0.441],
+          [0.847, 0.441, 1.000, 0.847, 0.441, 0.971, 0.441],
           [0.467, 0.417, 0.667, 0.500, 0.500, 1.000, 0.417],
-          [0.056, 0.031, 0.108, 0.142, 0.032, 1.000, 0.037]]
+          [0.974, 1.000, 0.920, 0.886, 0.999, 0.000, 0.994]]
 
 priorities = [[1, 0.1, 0.9, 1, 0.2],
             [0.1, 0.9, 0.2, 0.1, 1],
@@ -108,11 +107,29 @@ def get_input_priorities(ask_allowing_input_priorities=True):
     return chosen_priorities
 
 
+def transpose_matrix(matrix):
+    transposed_matrix = []
+
+    for j in range(len(matrix[0])):
+        row = []
+        for i in range(len(matrix)):
+            row.append(matrix[i][j])
+        transposed_matrix.append(row)
+    return transposed_matrix
+
+
 if __name__ == '__main__':
+    matrix = transpose_matrix(matrix)
+
     input_priorities = get_input_priorities(ask_allowing_input_priorities=False)
+
+    for y in range(len(matrix)):
+        for x in range(len(matrix[y])):
+            matrix[y][x] *= input_priorities[x]
 
     calculate_and_output_criteria(get_laplace_criteria, "Критерий Лапласа")
     calculate_and_output_criteria(get_wald_criteria, "Критерий Вальда")
     calculate_and_output_criteria(get_savage_criteria, "Критерий Сэвиджа")
-    calculate_and_output_criteria(get_hurwitz_criteria, "Критерий Гурвица", optimism=0.5)
-
+    calculate_and_output_criteria(get_hurwitz_criteria, "Критерий Гурвица (0)", optimism=0)
+    calculate_and_output_criteria(get_hurwitz_criteria, "Критерий Гурвица (0.5)", optimism=0.5)
+    calculate_and_output_criteria(get_hurwitz_criteria, "Критерий Гурвица (1)", optimism=0.5)
